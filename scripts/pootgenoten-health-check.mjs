@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 
-const configured = process.env.POOTGENOTEN_PRODUCTION_URL || 'https://waldokolk-dotcom.github.io/whatsup-dog/';
+const configured = process.env.POOTGENOTEN_PRODUCTION_URL || 'https://pootgenoten.onrender.com/';
 const base = new URL(configured);
-const expectedOrigin = 'https://waldokolk-dotcom.github.io';
-const expectedPath = '/whatsup-dog/';
+const expectedOrigin = 'https://pootgenoten.onrender.com';
+const expectedPath = '/';
 if (base.protocol !== 'https:' || base.origin !== expectedOrigin || base.pathname !== expectedPath || base.search || base.hash || base.username || base.password) {
   throw new Error('Production target is outside the approved Pootgenoten URL.');
 }
