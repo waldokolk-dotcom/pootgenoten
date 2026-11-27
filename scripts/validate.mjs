@@ -12,6 +12,10 @@ const backend=read('backend-config.js');
 assert.ok(fs.existsSync('data/nijkerk-losloopgebieden.geojson'),'Nijkerk losloopgebieden GeoJSON missing');
 
 assert.match(html,/id="view-map"/,'Map view missing');
+assert.match(html,/<title>Pootgenoten<\/title>/,'Pootgenoten document title missing');
+assert.match(html,/JOUW BUURT • POOTGENOTEN/,'Pootgenoten home identity missing');
+assert.doesNotMatch(html,/Whatsup Dog|WhatsUp Dog/i,'Legacy product branding remains in the public interface');
+assert.equal(JSON.parse(read('manifest.webmanifest')).name,'Pootgenoten','PWA install name must be Pootgenoten');
 assert.match(html,/id="offleashToggle"/,'Losloopgebieden switch missing');
 assert.match(html,/id="pawFab"/,'Thumb-sized PawWheel launcher missing');
 assert.match(html,/id="view-alerts"/,'Notifications tab missing');
@@ -95,7 +99,7 @@ assert.match(sw,/modern-2026\.css\?v=1/,'Offline cache missing modern design lay
 assert.match(sw,/app-v3\.css\?v=27/,'Offline cache missing V3 CSS');
 assert.match(app,/SOCIAL_LINKS=Object\.freeze/,'Central social configuration missing');
 assert.match(app,/window\.open\(facebook,"_blank","noopener,noreferrer"\)/,'Facebook share destination missing');
-assert.match(html,/Volg WhatsUp Dog/,'Facebook section missing');
+assert.match(html,/Volg Pootgenoten/,'Facebook section missing');
 assert.match(html,/socialThinkAlong/,'Think-along link missing');
 assert.doesNotMatch(html,/Meta Pixel|connect\.facebook\.net|facebook-jssdk/,'Meta SDK or tracking must not ship');
 assert.match(sw,/showNotification/,'Push notification handler missing');
