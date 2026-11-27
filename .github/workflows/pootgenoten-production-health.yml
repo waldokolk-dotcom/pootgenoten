@@ -1,0 +1,30 @@
+name: Pootgenoten production health
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, feat/pootgenoten-woc-health-20261127]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pootgenoten-production-health
+  cancel-in-progress: true
+
+jobs:
+  health:
+    name: Check live app and core assets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probe the approved public production URL
+        run: node scripts/pootgenoten-health-check.mjs
