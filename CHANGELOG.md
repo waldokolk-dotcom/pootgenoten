@@ -1,3 +1,9 @@
+## 2026-11-27 — Pootgenoten-conversie gestart
+
+- Publieke productnaam, startscherm en PWA-installatienaam omgezet naar Pootgenoten.
+- Bestaande kaart-, meldings-, weggeef-, offline- en locatiefunctionaliteit behouden.
+- Deze conversiebranch is nog niet gepubliceerd; accountregistratie, verificatie, berichten en WOC-bewaking blijven releaseblokkers.
+
 # Changelog
 
 ## [4.15] - 2026-10-03
