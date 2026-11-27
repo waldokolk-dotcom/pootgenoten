@@ -21,7 +21,7 @@ async function boot(){
  initMap(); bind(); showView("home"); syncPushUi(); applyProfile();
  await refreshReports().catch(err=>console.warn("Meldingen laden",err));
  await refreshGiveaways().catch(err=>console.warn("Weggeefhoek laden",err));
- await refreshMine().catch(err=>console.warn("Mijn Whatsup laden",err));
+ await refreshMine().catch(err=>console.warn("Mijn profiel laden",err));
  const resync=()=>{if(document.visibilityState!=="hidden"){map?.invalidateSize();refreshReports({reason:"lifecycle"}).catch(()=>{})}};
  window.addEventListener("pageshow",resync);
  window.addEventListener("focus",resync);
@@ -410,7 +410,7 @@ async function openReportDetail(r){
  resolve.hidden=!own||r.status!=="active";
  configureReportReaction(r).catch(err=>console.warn("Reactie laden mislukt",err));
  const share=$("#detailShare");
- if(share)share.onclick=()=>shareContent({title:"Melding via Whatsup Dog",text:[labelType(r.type),r.subtype,r.text].filter(Boolean).join(" — ")});
+ if(share)share.onclick=()=>shareContent({title:"Melding via Pootgenoten",text:[labelType(r.type),r.subtype,r.text].filter(Boolean).join(" — ")});
  resolve.onclick=async()=>{
    if(!confirm("Is dit opgelost? De melding verdwijnt direct van de kaart."))return;
    try{
@@ -591,7 +591,7 @@ async function refreshGiveaways(){
    }
     a.innerHTML=img+'<div class="give-body"><span class="badge">'+(x.kind==="ruilen"?"Ruilen":"Gratis")+'</span><h3>'+esc(x.title)+'</h3><p>'+esc(x.description)+'</p><p class="muted small location">📍 '+esc(x.town)+'</p><div class="give-actions"><button class="give-like reaction-button love" type="button" aria-label="Leuk"><span class="reaction-love-icon" aria-hidden="true"><svg viewBox="0 0 42 28" focusable="false"><path class="reaction-heart" d="M21 22S14 17.7 14 12.2a4.7 4.7 0 0 1 8.2-3.1L21 10.4l1.2-1.3a4.7 4.7 0 0 1 8.2 3.1C30.4 17.7 21 22 21 22Z"/><g class="reaction-paws"><circle cx="6.5" cy="7.4" r="2.7"/><circle cx="12.2" cy="5.4" r="2.5"/><path d="M6.7 11.1c2.5-2.8 6.4-2.5 8.3.5 1.5 2.4-.6 5.1-3.2 4.6l-3.5-.8c-2.4-.5-3.1-2.8-1.6-4.3Z"/><circle cx="35.5" cy="7.4" r="2.7"/><circle cx="29.8" cy="5.4" r="2.5"/><path d="M35.3 11.1c-2.5-2.8-6.4-2.5-8.3.5-1.5 2.4.6 5.1-3.2 4.6l3.5-.8c2.4-.5 3.1-2.8 1.6-4.3Z"/></g></svg></span><span>Leuk</span><b class="give-like-count"></b></button><button class="secondary give-share" type="button">↗ Delen</button><button class="primary contact">✉️ Neem contact op</button></div></div>';
     a.querySelector(".contact").onclick=()=>contactGiveaway(x);
-    a.querySelector(".give-share").onclick=()=>shareContent({title:"Weggeefitem via Whatsup Dog",text:[x.title,x.description,x.town?"Plaats/wijk: "+x.town:""].filter(Boolean).join(" — ")});
+    a.querySelector(".give-share").onclick=()=>shareContent({title:"Weggeefitem via Pootgenoten",text:[x.title,x.description,x.town?"Plaats/wijk: "+x.town:""].filter(Boolean).join(" — ")});
    const like=a.querySelector(".give-like");
    loadGiveawayReaction(x.id,like).catch(err=>console.warn("Weggeef-like laden mislukt",err));
    like.onclick=()=>toggleGiveawayReaction(x.id,like);
@@ -618,7 +618,7 @@ async function toggleGiveawayReaction(id,button){
  }catch(err){console.warn(err);toast("Leuk opslaan lukt nu niet")}
  finally{button.disabled=false}
 }
-async function contactGiveaway(x){if(x.owner_id===user.id)return toast("Dit is jouw eigen item");const {data,error}=await client.rpc("get_giveaway_contact",{target:x.id});if(error||!data)return toast("Contactadres niet beschikbaar");location.href="mailto:"+encodeURIComponent(data)+"?subject="+encodeURIComponent("Reactie via Whatsup Dog – "+x.title)+"&body="+encodeURIComponent("Hallo,\n\nIk zag via Whatsup Dog dat je '"+x.title+"' aanbiedt. Is dit nog beschikbaar?\n\nGroet,")}
+async function contactGiveaway(x){if(x.owner_id===user.id)return toast("Dit is jouw eigen item");const {data,error}=await client.rpc("get_giveaway_contact",{target:x.id});if(error||!data)return toast("Contactadres niet beschikbaar");location.href="mailto:"+encodeURIComponent(data)+"?subject="+encodeURIComponent("Reactie via Pootgenoten – "+x.title)+"&body="+encodeURIComponent("Hallo,\n\nIk zag via Pootgenoten dat je '"+x.title+"' aanbiedt. Is dit nog beschikbaar?\n\nGroet,")}
 async function submitGiveaway(e){
  e.preventDefault();const f=e.currentTarget,b=$("#giveSubmit");b.disabled=true;let path=null;
  try{const id=crypto.randomUUID(),file=f.photo.files[0];if(file){const blob=await compress(file);path=user.id+"/"+id+".jpg";const up=await client.storage.from("giveaway-photos").upload(path,blob,{contentType:"image/jpeg",upsert:false});if(up.error)throw up.error}
@@ -627,7 +627,7 @@ async function submitGiveaway(e){
 }
 async function refreshMine(){
  const p=profile(),s=settings();
- $("#myName").textContent=p.name||"Mijn Whatsup";
+ $("#myName").textContent=p.name||"Mijn profiel";
  $("#myMeta").textContent=[p.petName,p.breed,s.areaLabel].filter(Boolean).join(" · ")||"Persoonlijke instellingen";
  $("#myAvatar").textContent=p.avatar||"🐾";
  $("#myAvatarLarge").textContent=p.avatar||"🐾";
@@ -661,7 +661,7 @@ function applyProfile(){
  const p=profile(),s=settings();
  if($("#myAvatar"))$("#myAvatar").textContent=p.avatar||"🐾";
  if($("#myAvatarLarge"))$("#myAvatarLarge").textContent=p.avatar||"🐾";
- if($("#myName"))$("#myName").textContent=p.name||"Mijn Whatsup";
+ if($("#myName"))$("#myName").textContent=p.name||"Mijn profiel";
  if($("#myAreaLabel"))$("#myAreaLabel").textContent=s.areaLabel||"Mijn gebied";
  const town=$("#giveForm [name=\"town\"]"); if(town)town.value=s.areaLabel||"";
 }
@@ -723,15 +723,15 @@ async function ensurePushSubscription(){
 }
 function pushErrorMessage(err){
  const code=String(err?.message||err||"");
- if(code.includes("ios-install-required"))return "Op iPhone/iPad werkt push nadat je Whatsup Dog via Safari op je beginscherm hebt gezet en vanaf daar opent.";
+ if(code.includes("ios-install-required"))return "Op iPhone/iPad werkt push nadat je Pootgenoten via Safari op je beginscherm hebt gezet en vanaf daar opent.";
  if(code.includes("permission-denied"))return "Meldingen zijn in je browser geblokkeerd. Zet meldingen voor deze site aan in de browser- of telefooninstellingen en probeer opnieuw.";
  if(code.includes("permission-dismissed"))return "Je hebt de toestemmingsvraag gesloten. Tik opnieuw op de schakelaar om het nogmaals te proberen.";
  if(code.includes("notifications-unsupported")||code.includes("push-unsupported"))return "Deze browser ondersteunt geen web-push. Gebruik een recente versie van Chrome, Edge, Safari of de geïnstalleerde app.";
- if(code.includes("service-worker"))return "De app-service kon niet starten. Sluit Whatsup Dog volledig, open opnieuw en probeer nogmaals.";
- if(code.includes("secure-context-required"))return "Push werkt alleen via de beveiligde https-versie van Whatsup Dog.";
- if(code.includes("NotAllowedError"))return "De browser of je laptop blokkeert meldingen. Sta meldingen toe voor Whatsup Dog en controleer ook de meldingsinstellingen van Windows/macOS.";
- if(code.includes("AbortError")||code.includes("InvalidStateError"))return "De oude browserregistratie kon niet worden hersteld. Zet push één keer uit en weer aan; Whatsup Dog maakt dan een nieuwe inschrijving.";
- return "Push kon niet worden geactiveerd. Controleer de meldingsrechten van Whatsup Dog in je browser én in Windows/macOS en probeer opnieuw.";
+ if(code.includes("service-worker"))return "De app-service kon niet starten. Sluit Pootgenoten volledig, open opnieuw en probeer nogmaals.";
+ if(code.includes("secure-context-required"))return "Push werkt alleen via de beveiligde https-versie van Pootgenoten.";
+ if(code.includes("NotAllowedError"))return "De browser of je laptop blokkeert meldingen. Sta meldingen toe voor Pootgenoten en controleer ook de meldingsinstellingen van Windows/macOS.";
+ if(code.includes("AbortError")||code.includes("InvalidStateError"))return "De oude browserregistratie kon niet worden hersteld. Zet push één keer uit en weer aan; Pootgenoten maakt dan een nieuwe inschrijving.";
+ return "Push kon niet worden geactiveerd. Controleer de meldingsrechten van Pootgenoten in je browser én in Windows/macOS en probeer opnieuw.";
 }
 async function togglePush(e){
  const toggle=e.target;
@@ -796,7 +796,7 @@ async function testPushNotification(){
    setPushStatus("Laptop/browser wordt gecontroleerd…");
    await ensurePushSubscription();
    const reg=await getReadyRegistration();
-   await reg.showNotification("Whatsup Dog",{
+   await reg.showNotification("Pootgenoten",{
      body:"Test geslaagd — pushmeldingen werken op dit apparaat.",
      icon:"./icon-192.png",badge:"./icon-192.png",tag:"whatsup-dog-test",
      renotify:true
@@ -862,9 +862,9 @@ const VERSION_NOTES={
  "4.23":["Een rustigere, modernere vormgeving met één herkenbaar kleur- en componentensysteem.","Compactere bediening, grotere aanraakvlakken en een volwassen indeling voor tablet en desktop."],
  "4.22":["Meldingen worden als concept op dit apparaat bewaard en kunnen later worden hervat.","Bekijk of verwijder een foto vooraf en controleer alle gegevens vóór publicatie."],
  "4.21":["Nieuwe kaartmarkers, compacte clusters en een vernieuwde kaartpresentatie.","Mobiele bediening en kleuren volledig herzien."],
- "4.20":["Whatsup Dog heeft een nieuw premium ontwerp met Home, SVG-iconen, kaartfilters en vernieuwde navigatie.","Je bestaande meldingen, pushinstellingen en weggeefitems blijven behouden."],
+ "4.20":["Pootgenoten heeft een nieuw premium ontwerp met Home, SVG-iconen, kaartfilters en vernieuwde navigatie.","Je bestaande meldingen, pushinstellingen en weggeefitems blijven behouden."],
  "4.16":[
-  "Nieuw: de knop Delen opent rechtstreeks de WhatsUp Dog-Facebookpagina."
+  "Nieuw: de knop Delen opent rechtstreeks de Pootgenoten-Facebookpagina."
  ],
  "4.14":[
   "Het pootjes-en-hartje-icoon is aangepast: de pootjes zijn nu duidelijker en groter dan het hartje.",
@@ -887,7 +887,7 @@ function openUpdateNotes(){
 }
 function syncVersionUi(){
  const v=$("#appVersion"),d=$("#versionDate");
- if(v)v.textContent="Whatsup Dog "+APP_VERSION;
+ if(v)v.textContent="Pootgenoten "+APP_VERSION;
  if(d)d.textContent="Bijgewerkt "+APP_VERSION_DATE;
 }
 
@@ -1002,5 +1002,5 @@ async function applyAppUpdate(){
 }
 
 registerUpdateSystem();
-boot().catch(e=>{console.error(e);toast("Whatsup Dog kon niet volledig starten")});
+boot().catch(e=>{console.error(e);toast("Pootgenoten kon niet volledig starten")});
 })();

@@ -1,6 +1,9 @@
-# Whatsup dog
 
-Standalone PWA extracted from `waldokolk-dotcom/VakantieApp/whatsup-dog` on 2026-09-09. The original source is retained for a safe cutover. All 20 Nijkerk GeoJSON polygons are copied without alteration. Map tiles require internet; the app shell, Leaflet and official polygons are cached offline.
+> **Conversiestatus — 27 november 2026:** de bestaande codebasis en productnaam worden omgezet naar Pootgenoten. Deze branch is nog geen productieoplevering. De huidige openbare PWA is accountloos; verificatie van registratie, privéchat, notificatieverzending en live herstel blijft een releaseblokker. WAF-blokken zijn nog niet als productiegeverifieerd geregistreerd.
+
+# Pootgenoten
+
+Pootgenoten is the rebranded continuation of the Whatsup Dog community PWA. The existing map, report, giveaway, offline and location-based features are retained during the conversion. The original source is retained for a safe cutover. All 20 Nijkerk GeoJSON polygons are copied without alteration. Map tiles require internet; the app shell, Leaflet and official polygons are cached offline.
 
 ## Run and validate
 

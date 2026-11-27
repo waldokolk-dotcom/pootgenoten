@@ -1,12 +1,12 @@
 {
-  "name": "Whatsup dog",
-  "short_name": "Whatsup dog",
-  "description": "Samen op pad. Een mooiere buurt voor honden en mensen.",
+  "name": "Pootgenoten",
+  "short_name": "Pootgenoten",
+  "description": "Samen zorgen voor dieren in de buurt.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#fbf5e8",
-  "theme_color": "#fbf5e8",
+  "theme_color": "#f4f7f4",
   "icons": [
     {
       "src": "icon-192.png",
